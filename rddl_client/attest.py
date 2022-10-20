@@ -1,12 +1,11 @@
 import urllib3
 import json
-from enum import Enum
-from .config import HW3C_SERVICE
+from .config import HW3_SERVICE
 
 
 def store(data: dict):
     http = urllib3.PoolManager()
-    cid_resp = http.request("POST", HW3C_SERVICE + "/data", headers={"Content-Type": "application/json"}, body=data)
+    cid_resp = http.request("POST", HW3_SERVICE + "/data", headers={"Content-Type": "application/json"}, body=data)
     return cid_resp.data.decode()
 
 
@@ -41,14 +40,14 @@ def get_energy_data():
 
 def attest_cid(cid: str):
     http = urllib3.PoolManager()
-    tx_id = http.request("POST", HW3C_SERVICE + "/cid?cid=" + cid)
+    tx_id = http.request("POST", HW3_SERVICE + "/cid?cid=" + cid)
     return tx_id.data.decode()
 
 
 def attest_machine(machine_descripion: dict):
     data = json.dumps(machine_descripion)
     http = urllib3.PoolManager()
-    tx_id = http.request("POST", HW3C_SERVICE + "/machine", headers={"Content-Type": "application/json"}, body=data)
+    tx_id = http.request("POST", HW3_SERVICE + "/machine", headers={"Content-Type": "application/json"}, body=data)
     return tx_id.data.decode()
 
 
@@ -59,6 +58,3 @@ def get_and_attest_energy():
     tx_id = attest_cid(cid)
     print(f"TX ID: {tx_id}")
     print(f"https://test.ipdb.io/api/v1/transactions/{json.loads(tx_id)['NFT token']}")
-
-
-# get_and_attest_energy()
