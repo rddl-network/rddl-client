@@ -1,0 +1,3 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/home/rddl/.local/bin
+*/15 * * * *   rddl	(cd /home/rddl/rddl-client && HW_03_SERVICE="http://hw-03:8000" TASMOTA_SERVICE=http://sonoff poetry run rddl-client attest-energy-consumption) | logger -t 0x21e8
