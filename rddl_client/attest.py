@@ -1,7 +1,7 @@
 import urllib3
 import json
 from .config import HW_03_SERVICE
-from .config import TASMOTA_SERVICE 
+from .config import TASMOTA_SERVICE
 
 
 def store(data: dict):
@@ -12,11 +12,13 @@ def store(data: dict):
 
 def get_energy_data():
     http = urllib3.PoolManager()
-    consumption = http.request("GET", TASMOTA_SERVICE +"/cm?cmnd=Status%208")
+    consumption = http.request("GET", TASMOTA_SERVICE + "/cm?cmnd=Status%208")
     return consumption.data.decode()
+
 
 def get_fake_energy_data():
     import datetime
+
     x = str(datetime.datetime.now())
     dd = {
         "StatusSNS": {
