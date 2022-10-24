@@ -61,7 +61,6 @@ def get_0x21e8_config():
     return cfg.data.decode()
 
 
-
 def get_and_attest_energy():
     data = get_fake_energy_data()
     cid = store(data)
@@ -69,5 +68,5 @@ def get_and_attest_energy():
     tx_id = attest_cid(cid)
     print(f"TX ID: {tx_id}")
     cfg = get_0x21e8_config()
-    #print( cfg)
-    #print(f"{ cfg['planetmint'] }/api/v1/transactions/{json.loads(tx_id)['NFT token']}")
+    # print( cfg)
+    # print(f"{ cfg['planetmint'] }/api/v1/transactions/{json.loads(tx_id)['NFT token']}")
