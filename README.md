@@ -50,5 +50,5 @@ sudo systemctl restart cron.service
 The outcome of the script is written to syslog. Use the folloing command to inspect the activities on your node
 
 ```
-sudo grep 0x21e8 /var/log/syslog
+sudo grep rddl-client /var/log/syslog
 ```
