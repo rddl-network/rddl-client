@@ -1,7 +1,8 @@
 import typer
 import json
 
-from .attest import store, get_and_attest_energy, attest_cid, attest_machine
+from .attest import store, get_and_attest_energy
+from .attest import attest_cid, attest_machine, get_0x21e8_config
 from .seed import create_seed, recover_seed
 
 
@@ -35,7 +36,11 @@ def cmd_attest_data(data: str):
 @app.command("attest-energy-consumption")
 def cmd_attest_energy_consumption():
     get_and_attest_energy()
-
+    
+@app.command("service-config")
+def cmd_get_config():
+    cfg = get_0x21e8_config()
+    print(f"CONFIG : {cfg}")
 
 @app.command("create-seed")
 def cmd_create_seed(words: int = 24):
