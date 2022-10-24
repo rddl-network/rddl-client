@@ -1,20 +1,22 @@
 import urllib3
 import json
-from .config import HW3_SERVICE
+from .config import HW_03_SERVICE
+from .config import TASMOTA_SERVICE 
 
 
 def store(data: dict):
     http = urllib3.PoolManager()
-    cid_resp = http.request("POST", HW3_SERVICE + "/data", headers={"Content-Type": "application/json"}, body=data)
+    cid_resp = http.request("POST", HW_03_SERVICE + "/data", headers={"Content-Type": "application/json"}, body=data)
     return cid_resp.data.decode()
 
 
 def get_energy_data():
-    # http = urllib3.PoolManager()
-    # consumption = http.request("GET", "http://sonoff/cm?cmnd=Status%208")
-    # return consumption.data.decode()
-    import datetime
+    http = urllib3.PoolManager()
+    consumption = http.request("GET", TASMOTA_SERVICE +"/cm?cmnd=Status%208")
+    return consumption.data.decode()
 
+def get_fake_energy_data():
+    import datetime
     x = str(datetime.datetime.now())
     dd = {
         "StatusSNS": {
@@ -40,14 +42,14 @@ def get_energy_data():
 
 def attest_cid(cid: str):
     http = urllib3.PoolManager()
-    tx_id = http.request("POST", HW3_SERVICE + "/cid?cid=" + cid)
+    tx_id = http.request("POST", HW_03_SERVICE + "/cid?cid=" + cid)
     return tx_id.data.decode()
 
 
 def attest_machine(machine_descripion: dict):
     data = json.dumps(machine_descripion)
     http = urllib3.PoolManager()
-    tx_id = http.request("POST", HW3_SERVICE + "/machine", headers={"Content-Type": "application/json"}, body=data)
+    tx_id = http.request("POST", HW_03_SERVICE + "/machine", headers={"Content-Type": "application/json"}, body=data)
     return tx_id.data.decode()
 
 
