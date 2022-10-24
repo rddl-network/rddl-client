@@ -55,10 +55,18 @@ def attest_machine(machine_descripion: dict):
     return tx_id.data.decode()
 
 
+def get_0x21e8_config():
+    http = urllib3.PoolManager()
+    cfg = http.request("GET", HW_03_SERVICE + "/config", headers={"Content-Type": "application/json"})
+    return cfg.data.decode()
+
+
 def get_and_attest_energy():
-    data = get_energy_data()
+    data = get_fake_energy_data()
     cid = store(data)
     print(f"CID: {cid}")
     tx_id = attest_cid(cid)
     print(f"TX ID: {tx_id}")
-    print(f"https://test.ipdb.io/api/v1/transactions/{json.loads(tx_id)['NFT token']}")
+    cfg = get_0x21e8_config()
+    # print( cfg)
+    # print(f"{ cfg['planetmint'] }/api/v1/transactions/{json.loads(tx_id)['NFT token']}")
