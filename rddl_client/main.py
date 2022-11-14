@@ -10,7 +10,16 @@ app = typer.Typer()
 
 
 @app.command("attest-machine")
-def cmd_attest_machine(name: str, ticker: str, amount: int, precision: int, public_url: str, reissue: bool, cid: str):
+def cmd_attest_machine(name: str = typer.Argument(..., help="The name of the machine token that will be issued."), 
+                       ticker: str = typer.Argument(..., help="The ticker of the machine token that will be issued."),  
+                       amount: int = typer.Argument(..., help="The number of tokens that are to be issued."), 
+                       precision: int = typer.Argument(..., help="The precision of the token."), 
+                       public_url: str = typer.Argument(..., help="The legal entity that this machine and token are associated with."), 
+                       reissue: bool = typer.Option(None, "--reissue/--no-reissue"), 
+                       cid: str = typer.Argument(..., help="The CID of the token details. This needs to created and handled before calling this method.") ):
+    """
+    This method issues the requested machine tokens for the machine on RDDL and notarizes the machine and the issued tokens.
+    """
     machine_description = {
         "name": name,
         "ticker": ticker,
@@ -25,7 +34,10 @@ def cmd_attest_machine(name: str, ticker: str, amount: int, precision: int, publ
 
 
 @app.command("attest-data")
-def cmd_attest_data(data: str):
+def cmd_attest_data(data: str= typer.Argument(..., help="A JSON object in string representation that is to be stored on IPFS and attested on RDDL.")):
+    """
+    This method stores the given JSON data on the configured storage solution and notarizes the resulting CID on RDDL, thereafter.
+    """
     json_data = json.dumps(data)
     cid = store(json_data)
     print(f"cid: {cid}")
@@ -35,17 +47,27 @@ def cmd_attest_data(data: str):
 
 @app.command("attest-energy-consumption")
 def cmd_attest_energy_consumption():
+    """
+    Reads out the energy meter and notarizes the data on-chain.
+    """
     get_and_attest_energy()
 
 
 @app.command("service-config")
 def cmd_get_config():
+    """
+    Shows the configuration of the 0x21e8 Keymanagement Service.
+    """
     cfg = get_0x21e8_config()
     print(f"CONFIG : {cfg}")
 
 
 @app.command("create-seed")
-def cmd_create_seed(words: int = 24):
+def cmd_create_seed(words: int = typer.Argument(24, help="The number of words (12 or 24) that the mnemonic phrase to be derived should contain.")):
+    """
+    Creates a seed based on true randomness and provices a mnemonic phrase (12 or 24 words) as a backup of the generated seed.
+    The lenght of the resulting mnemonic phrase implicitly defines the lenght of the seed.
+    """
     if words not in [12, 24]:
         print("Pleaes provide a recovery list with 12 or 24 words.")
 
@@ -54,7 +76,11 @@ def cmd_create_seed(words: int = 24):
 
 
 @app.command("recover-seed")
-def cmd_recover_seed(mnemonic_phrase: str):
+def cmd_recover_seed(mnemonic_phrase: str = typer.Argument(..., help="The mnemonic phrase, a space seperated list of 12 or 24 words")):
+    """
+    Recovers a seed from the menmonic phrase passed to the method (12 or 24 words).
+    The lenght of the resulting mnemonic phrase implicitly defines the lenght of the seed.
+    """
     word_array = mnemonic_phrase.split()
     size = len(word_array)
     if size not in [12, 24]:
