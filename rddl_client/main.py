@@ -1,5 +1,5 @@
 import typer
-import json
+import ast
 
 from .attest import store, get_and_attest_energy
 from .attest import attest_cid, attest_machine, get_0x21e8_config
@@ -40,16 +40,18 @@ def cmd_attest_machine(
 @app.command("attest-data")
 def cmd_attest_data(
     data: str = typer.Argument(
-        ..., help="A JSON object in string representation that is to be stored on IPFS and attested on RDDL."
-    )
+        ..., help="A dcit object in string representation that is to be stored on IPFS and attested on RDDL."
+    ),
+    encrypt: bool = typer.Option( False, "--encrypt"),
 ):
     """
     This method stores the given JSON data on the configured storage solution and notarizes the resulting CID on RDDL, thereafter.
     """
-    json_data = json.dumps(data)
-    cid = store(json_data)
-    print(f"cid: {cid}")
-    tx_id = attest_cid(cid)
+    data_dict = ast.literal_eval(data)
+    cid_dict = store(data_dict, encrypt)
+    print( f"{cid_dict}")
+    raw_cid = cid_dict['cid']
+    tx_id = attest_cid(raw_cid)
     print(f"tx_id: {tx_id}")
 
 
