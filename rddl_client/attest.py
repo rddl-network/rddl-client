@@ -7,12 +7,16 @@ from .config import TASMOTA_SERVICE
 
 def store(data: dict, encrypt: bool = False):
     http = urllib3.PoolManager()
-    dict_string = json.dumps( data )
-    cid_resp = http.request("POST", HW_03_SERVICE + "/data?encrypt="+str(encrypt), headers={"Content-Type": "application/json"}, body=dict_string)
+    dict_string = json.dumps(data)
+    cid_resp = http.request(
+        "POST",
+        HW_03_SERVICE + "/data?encrypt=" + str(encrypt),
+        headers={"Content-Type": "application/json"},
+        body=dict_string,
+    )
     cid_str = cid_resp.data.decode()
     cid_dict = ast.literal_eval(cid_str)
     return cid_dict
-
 
 
 def get_energy_data():
@@ -70,6 +74,6 @@ def get_0x21e8_config():
 
 def get_and_attest_energy():
     data = get_energy_data()
-    cid_dict = store(data,False)
-    tx_id = attest_cid(cid_dict['cid'])
+    cid_dict = store(data, False)
+    tx_id = attest_cid(cid_dict["cid"])
     print(f"TX ID: {tx_id}")

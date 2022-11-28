@@ -42,15 +42,15 @@ def cmd_attest_data(
     data: str = typer.Argument(
         ..., help="A dcit object in string representation that is to be stored on IPFS and attested on RDDL."
     ),
-    encrypt: bool = typer.Option( False, "--encrypt"),
+    encrypt: bool = typer.Option(False, "--encrypt"),
 ):
     """
     This method stores the given JSON data on the configured storage solution and notarizes the resulting CID on RDDL, thereafter.
     """
     data_dict = ast.literal_eval(data)
     cid_dict = store(data_dict, encrypt)
-    print( f"{cid_dict}")
-    raw_cid = cid_dict['cid']
+    print(f"{cid_dict}")
+    raw_cid = cid_dict["cid"]
     tx_id = attest_cid(raw_cid)
     print(f"tx_id: {tx_id}")
 
