@@ -10,5 +10,5 @@ def create_seed(words: int):
 
 def recover_seed(mnemonic_phrase: str):
     http = urllib3.PoolManager()
-    resp = http.request("POST", HW_03_SERVICE + "/seed?mnemonic=" + mnemonic_phrase)
+    resp = http.request("POST", HW_03_SERVICE + "/seed?mnemonic_phrase=" + mnemonic_phrase)
     return resp.data.decode()
