@@ -19,6 +19,7 @@ typer = "^0.6.1"
 shellingham = "^1.5.0"
 rich = "^12.6.0"
 python-decouple = "^3.6"
+py-dmidecode = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.10.0"
