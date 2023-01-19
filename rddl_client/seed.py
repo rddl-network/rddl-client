@@ -1,5 +1,5 @@
 import urllib3
-from .config import HW_03_SERVICE
+from rddl_client.config import HW_03_SERVICE
 
 
 def create_seed(words: int):
