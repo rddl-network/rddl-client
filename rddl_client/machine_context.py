@@ -84,8 +84,9 @@ def machine_description(id: int, metadata_cid: str) -> dict:
         "public_url": "https://rddl.io",
         "reissue": True,
         "cid": metadata_cid,
+        ## the following entries are added by the 0x21e8 service
         # "machine id": "machine identity of the secure element",  # skipped right now
-        # "LBTC pub-key": "m/44/LBTC/0/0/0",  # to be defined (programatically)
-        # "PLNTMNT pub-key": "m/44/PLMNT/0/0/0",  # to be defined (programatically)
+        # "issuer_liquid": "m/44/LBTC/0/0/0",  # to be defined (programatically)
+        # "issuer_planetmint": "m/44/PLMNT/0/0/0",  # to be defined (programatically)
     }
     return machine_obj
