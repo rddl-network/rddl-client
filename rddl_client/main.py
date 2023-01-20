@@ -10,7 +10,7 @@ app = typer.Typer()
 
 
 @app.command("attest-validator")
-def cmd_attest_machine_with_cid(
+def cmd_attest_validator(
     id: int = typer.Argument(
         ...,
         min=0,
