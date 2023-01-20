@@ -11,20 +11,20 @@ app = typer.Typer()
 
 @app.command("attest-validator")
 def cmd_attest_machine_with_cid(
-    id: str = typer.Argument(
-        ...,
+    id: int = typer.Argument(
+        ...,min=0, max=10000,
         help="The validator id. The IP geolocation and machine data as well as the default asset definition are created.",
     ),
 ):
-
     metadata_obj = metadata_object(id)
     metadata_cid = store(metadata_obj, False)
-
+    print(f"Metadata CID: {metadata_cid['cid']}")
+    
     """
     This method issues the requested machine tokens for the machine on RDDL and notarizes the machine and the issued tokens.
     """
-    machine_desc_obj = machine_description(id, metadata_cid)
-
+    machine_desc_obj = machine_description(id, metadata_cid["cid"])
+    print(f"Machine description: {machine_desc_obj}")
     resp = attest_machine(machine_desc_obj)
     print(resp)
 
