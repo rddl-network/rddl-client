@@ -1,24 +1,47 @@
 import typer
 import ast
 
-from .attest import store, get_and_attest_energy
-from .attest import attest_cid, attest_machine, get_0x21e8_config
-from .seed import create_seed, recover_seed
-
+from rddl_client.attest import store, get_and_attest_energy
+from rddl_client.attest import attest_cid, attest_machine, get_0x21e8_config
+from rddl_client.seed import create_seed, recover_seed
+from rddl_client.machine_context import metadata_object, machine_description
 
 app = typer.Typer()
 
 
+@app.command("attest-validator")
+def cmd_attest_validator(
+    id: int = typer.Argument(
+        ...,
+        min=0,
+        max=10000,
+        help="The validator id. The IP geolocation and machine data as well as the default asset definition are created.",
+    ),
+):
+    metadata_obj = metadata_object(id)
+    metadata_cid = store(metadata_obj, False)
+    print(f"Metadata CID: {metadata_cid['cid']}")
+
+    """
+    This method issues the requested machine tokens for the machine on RDDL and notarizes the machine and the issued tokens.
+    """
+    machine_desc_obj = machine_description(id, metadata_cid["cid"])
+    print(f"Machine description: {machine_desc_obj}")
+    resp = attest_machine(machine_desc_obj)
+    print(resp)
+
+
 @app.command("attest-machine")
-def cmd_attest_machine(
+def cmd_attest_machine_with_cid(
     name: str = typer.Argument(..., help="The name of the machine token that will be issued."),
     ticker: str = typer.Argument(..., help="The ticker of the machine token that will be issued."),
     amount: int = typer.Argument(..., help="The number of tokens that are to be issued."),
     precision: int = typer.Argument(..., help="The precision of the token."),
     public_url: str = typer.Argument(..., help="The legal entity that this machine and token are associated with."),
-    reissue: bool = typer.Option(None, "--reissue/--no-reissue"),
+    reissue: bool = typer.Option(True, "--reissue/--no-reissue"),
     cid: str = typer.Argument(
-        ..., help="The CID of the token details. This needs to created and handled before calling this method."
+        None,
+        help="The CID of the token details. This needs to created and handled before calling this method. In case this is not defined, the IP geolocation and machine data as well as the default asset definition are created.",
     ),
 ):
     """
@@ -33,6 +56,7 @@ def cmd_attest_machine(
         "reissue": reissue,
         "cid": cid,
     }
+
     resp = attest_machine(machine_description)
     print(resp)
 

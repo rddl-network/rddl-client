@@ -1,8 +1,8 @@
 import urllib3
 import json
 import ast
-from .config import HW_03_SERVICE
-from .config import TASMOTA_SERVICE
+from rddl_client.config import HW_03_SERVICE
+from rddl_client.config import TASMOTA_SERVICE
 
 
 def store(data: dict, encrypt: bool = False):
