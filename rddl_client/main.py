@@ -174,7 +174,7 @@ def transfer_token(
     from rddl_client.application.transfer import transfer_tokens
 
     status, message = transfer_tokens(transfer_description)
-    print( f"Status: {status} - {message}")
+    print(f"Status: {status} - {message}")
     return
 
 
