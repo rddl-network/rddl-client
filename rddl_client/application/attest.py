@@ -6,6 +6,8 @@ from rddl_client.application.energy import get_energy_data
 from rddl_client.config import HW_03_SERVICE
 from rddl_client.config import TASMOTA_SERVICE
 
+APPLICATION_JSON = "application/json"
+
 
 def store(data: dict, encrypt: bool = False):
     http = urllib3.PoolManager()
@@ -13,7 +15,7 @@ def store(data: dict, encrypt: bool = False):
     cid_resp = http.request(
         "POST",
         HW_03_SERVICE + "/data?encrypt=" + str(encrypt),
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": APPLICATION_JSON},
         body=dict_string,
     )
     cid_str = cid_resp.data.decode()
@@ -30,13 +32,13 @@ def attest_cid(cid: str):
 def attest_machine(machine_descripion: dict):
     data = json.dumps(machine_descripion)
     http = urllib3.PoolManager()
-    tx_id = http.request("POST", HW_03_SERVICE + "/machine", headers={"Content-Type": "application/json"}, body=data)
+    tx_id = http.request("POST", HW_03_SERVICE + "/machine", headers={"Content-Type": APPLICATION_JSON}, body=data)
     return tx_id.data.decode()
 
 
 def get_0x21e8_config():
     http = urllib3.PoolManager()
-    cfg = http.request("GET", HW_03_SERVICE + "/config", headers={"Content-Type": "application/json"})
+    cfg = http.request("GET", HW_03_SERVICE + "/config", headers={"Content-Type": APPLICATION_JSON})
     return cfg.data.decode()
 
 
