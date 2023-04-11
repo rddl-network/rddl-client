@@ -1,10 +1,11 @@
 import typer
 import ast
 
-from rddl_client.attest import store, get_and_attest_energy
-from rddl_client.attest import attest_cid, attest_machine, get_0x21e8_config
-from rddl_client.seed import create_seed, recover_seed
-from rddl_client.machine_context import metadata_object, machine_description
+from rddl_client.application.attest import store, get_and_attest_energy
+from rddl_client.application.energy import get_energy_data
+from rddl_client.application.attest import attest_cid, attest_machine, get_0x21e8_config
+from rddl_client.application.seed import create_seed, recover_seed
+from rddl_client.application.machine_context import metadata_object, machine_description
 
 app = typer.Typer()
 
@@ -87,6 +88,12 @@ def cmd_attest_energy_consumption():
     get_and_attest_energy()
 
 
+@app.command("read-energy-consumption")
+def cmd_read_energy_consumption():
+    data = get_energy_data()
+    print(f"Energy Data: {data}")
+
+
 @app.command("service-config")
 def cmd_get_config():
     """
@@ -132,6 +139,43 @@ def cmd_recover_seed(
 
     resp = recover_seed(mnemonic_phrase)
     print(resp)
+
+
+@app.command("transfer-token")
+def transfer_token(
+    nw_symbol: str = typer.Option("", help="The SLIP-44 network symbol the transaction is created for."),
+    nw_id: int = typer.Option(..., help="The SLIP-44 network id the transaction is created for."),
+    account: int = typer.Option(0, help="The account ID of the BIP44 HD path."),
+    change: int = typer.Option(0, help="The change type of the BIP44 HD path."),
+    index: int = typer.Option(0, help="The index of the BIP44 HD path."),
+    amount: float = typer.Option(
+        1.0, help="The amount of tokens being send. This can only be an integer compatible value for Planetmint."
+    ),
+    token_id: str = typer.Argument(..., help="The transaction that is to be transferred."),
+    output_id: int = typer.Argument(..., help="The output of the transaction that is to be transferred."),
+    recipient: str = typer.Argument(..., help="The address of the recipient to receive the transferred tokens."),
+    confidential: bool = typer.Option(
+        False, "--confidential/--no-confidential, this is only supported on Liquid (Not Planetmint)."
+    ),
+):
+    """ """
+    transfer_description = {
+        "nw_symbol": nw_symbol,
+        "nw_id": nw_id,
+        "account": account,
+        "change": change,
+        "index": index,
+        "amount": amount,
+        "token_id": token_id,
+        "output_id": output_id,
+        "recipient": recipient,
+        "confidential": confidential,
+    }
+    from rddl_client.application.transfer import transfer_tokens
+
+    status, message = transfer_tokens(transfer_description)
+    print(f"Status: {status} - {message}")
+    return
 
 
 if __name__ == "__main__":

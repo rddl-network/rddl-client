@@ -1,6 +1,8 @@
 import urllib3
 import json
 import ast
+
+from rddl_client.application.energy import get_energy_data
 from rddl_client.config import HW_03_SERVICE
 from rddl_client.config import TASMOTA_SERVICE
 
@@ -19,40 +21,6 @@ def store(data: dict, encrypt: bool = False):
     cid_str = cid_resp.data.decode()
     cid_dict = ast.literal_eval(cid_str)
     return cid_dict
-
-
-def get_energy_data():
-    http = urllib3.PoolManager()
-    consumption = http.request("GET", TASMOTA_SERVICE + "/cm?cmnd=Status%208")
-    data = consumption.data.decode()
-    cid_dict = ast.literal_eval(data)
-    return cid_dict
-
-
-def get_fake_energy_data():
-    import datetime
-
-    x = str(datetime.datetime.now())
-    data_dict = {
-        "StatusSNS": {
-            "Time": x,
-            "ENERGY": {
-                "TotalStartTime": x,
-                "Total": 0.782,
-                "Yesterday": 0.421,
-                "Today": 0.182,
-                "Power": 17,
-                "ApparentPower": 41,
-                "ReactivePower": 37,
-                "Factor": 0.43,
-                "Voltage": 230,
-                "Current": 0.177,
-            },
-            "ESP32": {"Temperature": 26.7},
-            "TempUnit": "C",
-        }
-    }
-    return data_dict
 
 
 def attest_cid(cid: str):
