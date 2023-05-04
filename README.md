@@ -23,8 +23,18 @@ The installation of the rddl-client can be easily conducted from the root direct
 ## Using rddl-client
 
 Please use ```poetry shell``` to enter the virtual python environemnt. Now, you can use the ```rddl-client``` as it comes.
-An alternative option is to run execute the command via poetry from the virtual environment  ```poetry run rddl-client <command> --help```.s
+An alternative option is to run execute the command via poetry from the virtual environment  ```poetry run rddl-client <command> --help```.
 
+### Configuration
+
+The following variables define how the client connects to the 0x21e8 serivce and the smart meter by with tasmota firmware
+* HW_03_SERVICE = (default="http://localhost:8000") - the [0x21e8 service](https://github.com/rddl-network/0x21e8) connection
+* TASMOTA_SERVICE (default="http://sonoff") - the link to the [tasmota API](https://tasmota.github.io/docs/API/) of the smart meter
+
+The environment varialbes can be set 
+* by using ```export```
+* by defining them prior to the cli command on the shell ```HW_03_SERVICE=http://localhost:8000 TASMOTA_SERVICE=http://192.168.0.1 rddl-client --help```
+* by defining them in the local environment file ```.env```
 
 ### Commands
 
