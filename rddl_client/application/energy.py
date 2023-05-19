@@ -6,9 +6,8 @@ from rddl_client.config import TASMOTA_SERVICE
 def get_energy_data():
     http = urllib3.PoolManager()
     consumption = http.request("GET", TASMOTA_SERVICE + "/cm?cmnd=Status%208")
-    data = consumption.data.decode()
-    cid_dict = ast.literal_eval(data)
-    return cid_dict
+    data_str = consumption.data.decode()
+    return data_str
 
 
 def get_fake_energy_data():

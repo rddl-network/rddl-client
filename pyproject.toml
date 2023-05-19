@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rddl-client"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Jürgen Eckel <juergen@riddleandcode.com>"]
 license = "AGPLv3"
@@ -20,10 +20,6 @@ shellingham = "^1.5.0"
 rich = "^12.6.0"
 python-decouple = "^3.6"
 py-dmidecode = "^0.1.0"
-
-[tool.poetry.dev-dependencies]
-black = "^22.10.0"
-
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

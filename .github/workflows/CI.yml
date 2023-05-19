@@ -1,0 +1,56 @@
+
+name: CI
+on: 
+  push:
+    branches:
+      - "*"
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches:
+      - "main"
+
+permissions: 
+  packages: write
+  contents: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable
+        with:
+          options: "--check -l 119"
+          src: "."
+
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Setup poetry
+        uses: Gr1N/setup-poetry@v7
+
+      - name: Install dependencies
+        run: poetry install --with dev 
+
+      - name: Upload to PyPI
+        run: |
+          poetry build
+          poetry publish -u __token__ -p ${{ secrets.PYPI_TOKEN }}
+      
+      - name: Upload to GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*

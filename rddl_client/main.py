@@ -103,6 +103,15 @@ def cmd_get_config():
     print(f"CONFIG : {cfg}")
 
 
+@app.command("get-energy-data")
+def cmd_get_energy_data():
+    """
+    Shows the configuration of the 0x21e8 Keymanagement Service.
+    """
+    cid_dict = get_energy_data()
+    print(f"Energy Data : {cid_dict}")
+
+
 @app.command("create-seed")
 def cmd_create_seed(
     words: int = typer.Argument(
