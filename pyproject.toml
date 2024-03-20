@@ -22,7 +22,7 @@ python-decouple = "^3.6"
 py-dmidecode = "^0.1.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
+black = ">=23.1,<25.0"
 
 [build-system]
 requires = ["poetry-core"]
